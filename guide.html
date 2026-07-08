@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>글씨 쓰기 연습장 · 사용설명서</title>
+<style>
+  :root{
+    --bg:#f4f5f7; --panel:#ffffff; --ink:#1f2328; --muted:#6b7280;
+    --line:#e3e6ea; --accent:#3b6ef5; --accent-soft:#eaf0ff;
+    --guide:#c9ccd1; --paper:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Nanum Gothic','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  .wrap{max-width:860px; margin:0 auto; padding:0 20px 80px;}
+
+  /* ===== 헤더 ===== */
+  header{
+    background:linear-gradient(180deg,#fff 0%, #f7f9ff 100%);
+    border-bottom:1px solid var(--line);
+    padding:44px 20px 40px; text-align:center; margin-bottom:36px;
+  }
+  header .inner{max-width:860px; margin:0 auto;}
+  header h1{font-size:30px; font-weight:800; margin:0 0 8px; letter-spacing:-.5px;}
+  header p{font-size:15px; color:var(--muted); margin:0 0 22px;}
+  .cta{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--accent); color:#fff; font-weight:800; font-size:15px;
+    padding:12px 22px; border-radius:11px;
+    box-shadow:0 6px 18px rgba(59,110,245,.28);
+  }
+  .cta:hover{background:#2f5ee0; text-decoration:none;}
+
+  /* ===== 섹션 ===== */
+  section{margin-bottom:44px;}
+  .sec-head{display:flex; align-items:baseline; gap:10px; margin:0 0 18px;}
+  .sec-head .no{
+    font-size:13px; font-weight:800; color:#fff; background:var(--accent);
+    width:26px; height:26px; border-radius:50%; display:inline-flex;
+    align-items:center; justify-content:center; flex:0 0 auto; align-self:center;
+  }
+  .sec-head h2{font-size:21px; font-weight:800; margin:0; letter-spacing:-.3px;}
+
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:22px 24px; box-shadow:0 1px 2px rgba(0,0,0,.03);
+  }
+  .card + .card{margin-top:14px;}
+
+  /* 빠른 시작 스텝 */
+  .steps{display:grid; gap:14px;}
+  @media(min-width:640px){ .steps{grid-template-columns:repeat(2,1fr);} }
+  .step{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:18px 20px; position:relative;
+  }
+  .step .badge{
+    font-size:12px; font-weight:800; color:var(--accent); background:var(--accent-soft);
+    border-radius:7px; padding:3px 9px; display:inline-block; margin-bottom:10px;
+  }
+  .step h3{font-size:16px; margin:0 0 5px; font-weight:800;}
+  .step p{margin:0; font-size:14px; color:var(--muted);}
+
+  /* 기능 표 */
+  .feat{display:grid; gap:0;}
+  .feat .row{
+    display:grid; grid-template-columns:130px 1fr; gap:14px;
+    padding:14px 0; border-bottom:1px solid var(--line);
+  }
+  .feat .row:last-child{border-bottom:none;}
+  .feat .k{font-weight:800; font-size:14.5px;}
+  .feat .v{font-size:14px; color:#444;}
+  .feat .v .tag{
+    display:inline-block; background:#f0f2f5; border-radius:6px;
+    padding:1px 7px; font-size:12.5px; font-weight:700; color:#555; margin:0 3px 3px 0;
+  }
+  @media(max-width:520px){ .feat .row{grid-template-columns:1fr; gap:4px;} }
+
+  /* 안내선 미리보기 */
+  .guides{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px;}
+  .gcell{text-align:center;}
+  .gcell .box{
+    aspect-ratio:1/1; border:1px solid var(--guide); border-radius:8px;
+    background:#fff; margin-bottom:8px; overflow:hidden;
+  }
+  .gcell svg{width:100%; height:100%; display:block;}
+  .gcell .name{font-size:13px; font-weight:800;}
+  .gcell .use{font-size:11.5px; color:var(--muted); margin-top:2px; line-height:1.4;}
+
+  /* 모드 카드 */
+  .modes{display:grid; gap:12px;}
+  @media(min-width:640px){ .modes{grid-template-columns:repeat(3,1fr);} }
+  .mode{
+    border:1px solid var(--line); border-radius:12px; padding:16px; background:#fff;
+  }
+  .mode .sample{
+    font-size:34px; text-align:center; padding:8px 0 10px; line-height:1;
+    font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  }
+  .mode .sample.trace{color:#c4c8ce;}
+  .mode .sample.black{color:#222;}
+  .mode .sample.blank{color:#d5d8dd; letter-spacing:2px;}
+  .mode h3{margin:0 0 4px; font-size:15px; font-weight:800; text-align:center;}
+  .mode p{margin:0; font-size:12.5px; color:var(--muted); text-align:center;}
+
+  /* 레시피 */
+  .recipe{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px 22px;}
+  .recipe + .recipe{margin-top:14px;}
+  .recipe h3{margin:0 0 12px; font-size:16px; font-weight:800; display:flex; align-items:center; gap:8px;}
+  .recipe ol{margin:0; padding-left:20px;}
+  .recipe li{font-size:14px; margin-bottom:5px;}
+  .recipe .chip{
+    display:inline-block; background:var(--accent-soft); color:var(--accent);
+    font-weight:700; font-size:12.5px; border-radius:6px; padding:1px 7px;
+  }
+
+  /* FAQ */
+  details{
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:0 18px; margin-bottom:10px;
+  }
+  details summary{
+    cursor:pointer; padding:15px 0; font-weight:800; font-size:15px; list-style:none;
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+  }
+  details summary::-webkit-details-marker{display:none;}
+  details summary::after{content:"+"; color:var(--accent); font-size:20px; font-weight:800;}
+  details[open] summary::after{content:"−";}
+  details .body{padding:0 0 16px; font-size:14px; color:#444;}
+
+  /* 인쇄 팁 리스트 */
+  .checklist{list-style:none; margin:0; padding:0;}
+  .checklist li{
+    padding:9px 0 9px 30px; position:relative; font-size:14.5px; border-bottom:1px solid var(--line);
+  }
+  .checklist li:last-child{border-bottom:none;}
+  .checklist li::before{
+    content:"✓"; position:absolute; left:0; top:9px; color:var(--accent); font-weight:800;
+  }
+  .checklist b{font-weight:800;}
+
+  .note{font-size:13px; color:var(--muted); margin-top:10px;}
+  footer{
+    text-align:center; color:var(--muted); font-size:13px;
+    border-top:1px solid var(--line); padding-top:28px; margin-top:10px;
+  }
+  footer .handle{font-weight:800; color:#9aa0a6;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <h1>✍️ 글씨 쓰기 연습장 사용설명서</h1>
+    <p>받아쓰기 · 따라쓰기 · 글씨 연습지를 몇 번의 클릭으로 만들어 인쇄하세요.</p>
+    <a class="cta" href="https://slp-irudassam.github.io/korean-handwriting/">웹앱 바로 열기 →</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 1. 빠른 시작 -->
+  <section>
+    <div class="sec-head"><span class="no">1</span><h2>30초 빠른 시작</h2></div>
+    <div class="steps">
+      <div class="step">
+        <span class="badge">STEP 1</span>
+        <h3>연습할 글 입력</h3>
+        <p>왼쪽 <b>연습할 글</b> 칸에 문장이나 낱말을 한 줄에 하나씩 적어요.</p>
+      </div>
+      <div class="step">
+        <span class="badge">STEP 2</span>
+        <h3>글꼴 · 칸 · 모드 고르기</h3>
+        <p>글꼴, 가로·세로 칸 수, 안내선, 글씨 모드를 학생 수준에 맞춰 조절해요.</p>
+      </div>
+      <div class="step">
+        <span class="badge">STEP 3</span>
+        <h3>미리보기 확인</h3>
+        <p>오른쪽에 A4 연습지가 실시간으로 그려져요. 바뀐 설정이 바로 반영됩니다.</p>
+      </div>
+      <div class="step">
+        <span class="badge">STEP 4</span>
+        <h3>인쇄 / PDF 저장</h3>
+        <p><b>🖨️ 인쇄 / PDF 저장</b> 버튼을 눌러 종이로 뽑거나 PDF로 저장해요.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 설정 한눈에 -->
+  <section>
+    <div class="sec-head"><span class="no">2</span><h2>설정 한눈에 보기</h2></div>
+    <div class="card">
+      <div class="feat">
+        <div class="row"><div class="k">연습할 글</div><div class="v">입력한 줄이 가로 칸 수보다 길면 자동으로 다음 줄로 넘어가요. 빈 줄을 넣으면 연습지에도 빈 줄이 생깁니다.</div></div>
+        <div class="row"><div class="k">글꼴</div><div class="v">받아쓰기·손글씨 글꼴 <b>12종</b>. 정자체 연습엔 <span class="tag">학교안심 받아쓰기</span>, 흥미 유도엔 손글씨 글꼴을 써요.</div></div>
+        <div class="row"><div class="k">칸 수</div><div class="v"><b>가로 칸</b>(한 줄 글자 수)과 <b>세로 줄</b>(한 페이지 줄 수)을 ± 버튼으로 조절. 칸 크기는 A4에 맞춰 자동 계산돼요.</div></div>
+        <div class="row"><div class="k">글자 크기</div><div class="v">칸 대비 글자 비율(<b>40~85%</b>). 저학년은 크게, 문장 연습은 작게. 기본 62%.</div></div>
+        <div class="row"><div class="k">안내선</div><div class="v"><span class="tag">없음</span><span class="tag">십자</span><span class="tag">십자+네모</span><span class="tag">십자+마름모</span><span class="tag">격자(米)</span> — 아래에서 미리보기로 확인하세요.</div></div>
+        <div class="row"><div class="k">글씨 모드</div><div class="v"><span class="tag">회색 따라쓰기</span><span class="tag">검은 글씨</span><span class="tag">빈칸 연습</span> 3가지 연습 방식.</div></div>
+        <div class="row"><div class="k">용지 방향</div><div class="v">A4 <b>세로</b>(짧은 낱말) / <b>가로</b>(문장 여러 줄). 기본은 가로.</div></div>
+        <div class="row"><div class="k">부가 옵션</div><div class="v"><b>공백 제거</b>(띄어쓰기 없이 낱글자) · <b>줄바꿈 무시</b>(한 흐름으로 이어붙이기) · <b>빈 줄 추가</b>(글자 줄 아래 직접 쓰는 칸).</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 안내선 -->
+  <section>
+    <div class="sec-head"><span class="no">3</span><h2>안내선 종류 미리보기</h2></div>
+    <div class="card">
+      <div class="guides">
+        <div class="gcell">
+          <div class="box"><svg viewBox="0 0 100 100" fill="none" stroke="#d2d5da" stroke-width="1"></svg></div>
+          <div class="name">없음</div><div class="use">칸만 있는 형태</div>
+        </div>
+        <div class="gcell">
+          <div class="box"><svg viewBox="0 0 100 100" fill="none" stroke="#d2d5da" stroke-width="1">
+            <line x1="50" y1="0" x2="50" y2="100" stroke-dasharray="3,3"/><line x1="0" y1="50" x2="100" y2="50" stroke-dasharray="3,3"/>
+          </svg></div>
+          <div class="name">십자</div><div class="use">글자 중심 맞추기<br>처음 연습에 추천</div>
+        </div>
+        <div class="gcell">
+          <div class="box"><svg viewBox="0 0 100 100" fill="none" stroke="#d2d5da" stroke-width="1">
+            <line x1="50" y1="0" x2="50" y2="100" stroke-dasharray="3,3"/><line x1="0" y1="50" x2="100" y2="50" stroke-dasharray="3,3"/>
+            <rect x="14" y="14" width="72" height="72"/>
+          </svg></div>
+          <div class="name">십자+네모</div><div class="use">크기·위치 함께 잡기</div>
+        </div>
+        <div class="gcell">
+          <div class="box"><svg viewBox="0 0 100 100" fill="none" stroke="#d2d5da" stroke-width="1">
+            <line x1="50" y1="0" x2="50" y2="100" stroke-dasharray="3,3"/><line x1="0" y1="50" x2="100" y2="50" stroke-dasharray="3,3"/>
+            <polygon points="50,8 92,50 50,92 8,50"/>
+          </svg></div>
+          <div class="name">십자+마름모</div><div class="use">중심·대각선 균형</div>
+        </div>
+        <div class="gcell">
+          <div class="box"><svg viewBox="0 0 100 100" fill="none" stroke="#d2d5da" stroke-width="1">
+            <line x1="50" y1="0" x2="50" y2="100" stroke-dasharray="3,3"/><line x1="0" y1="50" x2="100" y2="50" stroke-dasharray="3,3"/>
+            <line x1="0" y1="0" x2="100" y2="100" stroke-dasharray="3,3"/><line x1="100" y1="0" x2="0" y2="100" stroke-dasharray="3,3"/>
+          </svg></div>
+          <div class="name">격자(米)</div><div class="use">획 방향·위치 세밀 연습</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 글씨 모드 -->
+  <section>
+    <div class="sec-head"><span class="no">4</span><h2>글씨 모드 · 연습 흐름</h2></div>
+    <div class="modes">
+      <div class="mode">
+        <div class="sample trace">가나다</div>
+        <h3>회색 따라쓰기</h3>
+        <p>연한 회색 글씨를 따라 써요</p>
+      </div>
+      <div class="mode">
+        <div class="sample black">가나다</div>
+        <h3>검은 글씨</h3>
+        <p>진한 글씨를 보고 옆·아래에 써요</p>
+      </div>
+      <div class="mode">
+        <div class="sample blank">□□□</div>
+        <h3>빈칸 연습</h3>
+        <p>안내선만 있는 칸에 직접 써요</p>
+      </div>
+    </div>
+    <p class="note">추천 흐름 &nbsp;→&nbsp; <b>회색 따라쓰기</b>로 익히고 → <b>검은 글씨</b>로 보고 쓰고 → <b>빈칸 연습</b>으로 마무리 점검해요.</p>
+  </section>
+
+  <!-- 5. 활용 레시피 -->
+  <section>
+    <div class="sec-head"><span class="no">5</span><h2>바로 쓰는 활용 레시피</h2></div>
+
+    <div class="recipe">
+      <h3>📝 받아쓰기 연습지</h3>
+      <ol>
+        <li>받아쓰기 문장을 <b>한 줄에 하나씩</b> 입력</li>
+        <li>글꼴 <span class="chip">학교안심 받아쓰기</span></li>
+        <li>글씨 모드 <span class="chip">회색 따라쓰기</span> 또는 <span class="chip">검은 글씨</span></li>
+        <li><span class="chip">글자 줄 아래 빈 줄 추가</span> 켜기 → 따라쓰고 스스로 한 번 더</li>
+      </ol>
+    </div>
+
+    <div class="recipe">
+      <h3>🔤 낱글자 쓰기 연습지</h3>
+      <ol>
+        <li>연습할 글자 입력</li>
+        <li>가로 칸 수를 <b>적게</b> → 칸이 커져요</li>
+        <li>안내선 <span class="chip">십자+네모</span> 또는 <span class="chip">격자(米)</span></li>
+        <li>글씨 모드 <span class="chip">회색 따라쓰기</span></li>
+      </ol>
+    </div>
+
+    <div class="recipe">
+      <h3>✅ 빈칸 평가용 연습지</h3>
+      <ol>
+        <li>연습할 글을 넣어 칸 수·페이지 수 먼저 확인</li>
+        <li>글씨 모드 <span class="chip">빈칸 연습</span>으로 변경</li>
+        <li>인쇄 또는 PDF로 저장</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 6. 인쇄 팁 -->
+  <section>
+    <div class="sec-head"><span class="no">6</span><h2>인쇄 · PDF 저장 체크리스트</h2></div>
+    <div class="card">
+      <ul class="checklist">
+        <li><b>용지 크기</b> — A4</li>
+        <li><b>방향</b> — 웹앱에서 고른 방향과 동일하게(가로/세로)</li>
+        <li><b>여백</b> — 기본 또는 없음</li>
+        <li><b>배율</b> — 100% 권장</li>
+        <li><b>배경 그래픽</b> — 안내선이 안 보이면 반드시 켜기</li>
+        <li><b>PDF 저장</b> — 프린터 목록에서 <b>‘PDF로 저장’</b> 선택</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7. FAQ -->
+  <section>
+    <div class="sec-head"><span class="no">7</span><h2>자주 묻는 질문</h2></div>
+
+    <details>
+      <summary>안내선이 인쇄·PDF에서 흐리게 나와요</summary>
+      <div class="body">인쇄 창에서 <b>배경 그래픽</b> 옵션을 켜 보세요. 브라우저·프린터 설정에 따라 안내선 출력이 달라질 수 있어요.</div>
+    </details>
+    <details>
+      <summary>글자가 칸에서 너무 커 보여요</summary>
+      <div class="body"><b>글자 크기</b> 값을 낮추거나, 가로 칸·세로 줄 수를 줄여 칸을 크게 만들어 보세요.</div>
+    </details>
+    <details>
+      <summary>한 페이지에 내용이 너무 많이 들어가요</summary>
+      <div class="body"><b>세로 줄</b> 수를 줄이면 한 페이지 줄 수가 줄고, 넘치는 내용은 다음 페이지로 자동 분할돼요.</div>
+    </details>
+    <details>
+      <summary>띄어쓰기 칸이 비어 있어요</summary>
+      <div class="body">띄어쓰기는 빈칸으로 표시돼요. 띄어쓰기 없이 글자만 연습하려면 <b>공백 제거</b>를 켜세요.</div>
+    </details>
+    <details>
+      <summary>처음 설정으로 되돌리고 싶어요</summary>
+      <div class="body"><b>기본값으로</b> 버튼을 누르면 됩니다. 기본값: 학교안심 받아쓰기 · 62% · 가로 14칸 · 세로 10줄 · 십자 · 회색 따라쓰기 · 가로 방향 · 빈 줄 추가 켜짐.</div>
+    </details>
+  </section>
+
+  <footer>
+    글씨 쓰기 연습장 · <span class="handle">@slp_irudassam</span><br>
+    <a href="https://slp-irudassam.github.io/korean-handwriting/">slp-irudassam.github.io/korean-handwriting</a>
+  </footer>
+
+</div>
+</body>
+</html>
