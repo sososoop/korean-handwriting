@@ -115,7 +115,14 @@
     .paper{box-shadow:none; margin:0; border-radius:0;}
     .pwrap{page-break-after:always; margin-bottom:0;}
     .pwrap:last-child{page-break-after:auto;}
+    /* 한글놀이 체험판에서 열면 인쇄 막음 */
+    body.trial .stage{display:none !important;}
+    body.trial::after{content:"한글놀이 체험판에서는 미리보기만 할 수 있어요. 인쇄는 정식판(sososoop.com/hangul)에서 할 수 있어요."; display:block; padding:40px; font-size:18px; font-weight:700;}
   }
+  .trial-note{display:none; font-size:14px; line-height:1.6; font-weight:700; background:#fff7e0; border:1px solid #f0d58a; border-radius:8px; padding:10px 12px; margin:0;}
+  .trial-note a{color:#5b6ef5; font-weight:900;}
+  body.trial .trial-note{display:block;}
+  body.trial .print-btn{display:none;}
   @media (max-width:760px){
     body{flex-direction:column;}
     .panel{width:100%; min-width:0; height:auto; position:static; border-right:none; border-bottom:1px solid var(--line);}
@@ -199,7 +206,8 @@
   <div class="divider"></div>
 
   <div class="actions">
-    <button class="btn btn-primary" onclick="window.print()">🖨️ 인쇄 / PDF 저장</button>
+    <button class="btn btn-primary print-btn" onclick="window.print()">🖨️ 인쇄 / PDF 저장</button>
+    <p class="trial-note">🔒 한글놀이 체험판에서는 미리보기만 할 수 있어요.<br>인쇄·PDF 저장은 <a href="https://sososoop.com/hangul" target="_blank" rel="noopener">정식판</a>에서 할 수 있어요.</p>
   </div>
   <div class="actions">
     <button class="btn btn-ghost" id="resetBtn">기본값으로</button>
@@ -419,6 +427,17 @@ document.getElementById("practiceLine").addEventListener("change",e=>{S.practice
   });
 });
 document.getElementById("resetBtn").addEventListener("click",()=>{S={...DEFAULTS};syncUI();render();});
+
+// 한글놀이에서 열 때: ?words=낱말,낱말 → 한 줄에 하나씩 / ?trial=1 → 인쇄 막음(체험판)
+(function fromHangul(){
+  const q=new URLSearchParams(location.search);
+  const w=q.get("words");
+  if(w){ const list=w.split(",").map(x=>x.trim()).filter(Boolean).slice(0,60); if(list.length) S.text=list.join("\n"); }
+  if(q.get("trial")==="1"){
+    document.body.classList.add("trial");
+    window.addEventListener("keydown",e=>{ if((e.metaKey||e.ctrlKey) && (e.key==="p"||e.key==="P")){ e.preventDefault(); } });
+  }
+})();
 
 // init
 buildFontSelect();
