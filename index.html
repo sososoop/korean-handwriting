@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>글씨 쓰기 연습장 만들기</title>
+<meta name="color-scheme" content="light">
+<title>글씨연습장 · 소소숲 : 지혜의 기록소</title>
 <style id="pageStyle">@page{size:A4 portrait; margin:0;}</style>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <style id="customFonts">
@@ -24,66 +25,136 @@
 @font-face { font-family:'Cafe24Gowoonbam'; src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Oneprettynight.woff') format('woff'); font-weight:normal; font-display:swap; }
 </style>
 <style>
+  /* ===== 소소숲 기본 디자인(센터 대시보드) · 밝은 화면만 =====
+     바탕 #fffdf7 + 40px 모눈, 글자·테두리 #1a1a1a 2px, 직각, 파랑 #3b5bdb 강조, 민트 #12b5a5 보조, 상단 바 #141e10.
+     연습장 종이(.paper/.grid/.cell/.ch/.pagefoot)와 인쇄 규칙은 예전 그대로 둔다. */
   :root{
-    --bg:#f4f5f7; --panel:#ffffff; --ink:#1f2328; --muted:#6b7280;
-    --line:#e3e6ea; --accent:#3b6ef5; --accent-soft:#eaf0ff;
+    color-scheme:light;
+    --ink:#1a1a1a; --muted:#6b7280; --bg-paper:#fffdf7; --white:#fff;
+    --hair:#1a1a1a22; --grid-line:#1a1a1a0b;
+    --blue:#3b5bdb; --blue-dark:#2f49b0; --teal:#12b5a5; --teal-dark:#0e9488; --mint:#e1f6f2;
+    --nav:#141e10; --nav-ink:#f5f0e8; --nav-dim:#c0c7b7;
+    --text:#61666c; --ink-2:#4b5652; --soft-shadow:#dddccf; --surface-2:#f4f2ea;
+    --warn-soft:#fff4d6; --warn:#9a6700;
+    --border:2px solid var(--ink);
+    --font:system-ui,-apple-system,BlinkMacSystemFont,Pretendard,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+    /* 연습장 종이용(그대로) */
     --guide:#c9ccd1; --trace:#c4c8ce; --paper:#ffffff;
   }
   *{box-sizing:border-box;}
+  [hidden]{display:none!important}
   html,body{margin:0;padding:0;}
   body{
-    font-family:'Nanum Gothic','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
-    background:var(--bg); color:var(--ink);
-    display:flex; min-height:100vh;
+    color:var(--ink); background-color:var(--bg-paper);
+    background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);
+    background-size:40px 40px;
+    font-family:var(--font); font-size:14px; line-height:1.6; letter-spacing:-.02em;
+    min-height:100vh; min-height:100dvh; -webkit-font-smoothing:antialiased;
   }
+  button,input,select,textarea{font:inherit; color:inherit; letter-spacing:inherit;}
+  button,a,input,select{-webkit-tap-highlight-color:transparent;}
+  button{cursor:pointer;}
+  a{color:inherit; text-decoration:none;}
+  h1,p{margin:0; word-break:keep-all; overflow-wrap:break-word;}
+  em{font-style:normal; color:var(--blue);}
+  :focus-visible{outline:3px solid var(--teal); outline-offset:3px;}
+  svg.ic{width:1.1em; height:1.1em; vertical-align:-.18em; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; flex:none;}
 
-  /* ===== 컨트롤 패널 ===== */
-  .panel{
-    width:320px; min-width:320px; background:var(--panel);
-    border-right:1px solid var(--line);
-    padding:20px 20px 40px; height:100vh; overflow-y:auto; position:sticky; top:0;
-  }
-  .panel h1{font-size:18px; margin:0 0 4px; font-weight:800;}
-  .panel .sub{font-size:12px; color:var(--muted); margin:0 0 18px;}
+  /* ===== 상단 바 ===== */
+  .masthead{height:60px; background:var(--nav); color:var(--nav-ink); position:sticky; top:0; z-index:40;}
+  .masthead-inner{max-width:1440px; height:100%; margin:auto; padding:0 max(32px,env(safe-area-inset-left,0px)); display:flex; align-items:center; gap:18px;}
+  .brand{display:flex; align-items:center; gap:10px; font-size:16px; font-weight:750; white-space:nowrap; flex:none;}
+  .brand img{width:32px; height:32px; object-fit:contain;}
+  .brand-sub{font-weight:450; opacity:.85; margin-left:3px; font-size:14px;}
+  .app-name{font-size:12px; color:var(--nav-dim); border-left:1px solid #f5f0e833; padding-left:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0;}
+  .mh-right{margin-left:auto; display:flex; align-items:center; gap:18px; flex:none;}
+  .mh-link{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--nav-dim); white-space:nowrap;}
+  .mh-link:hover{color:#fff;}
+
+  /* ===== 본문 틀 ===== */
+  .shell{max-width:1440px; margin:0 auto; padding:28px max(32px,env(safe-area-inset-right,0px)) 0;}
+  .page-heading{margin-bottom:24px;}
+  .eyebrow{display:table; font-size:11px; font-weight:800; letter-spacing:.1em; color:var(--blue); background:var(--white); border:1px solid var(--blue); padding:5px 10px; margin-bottom:16px;}
+  .page-heading h1{font-size:clamp(28px,2.7vw,40px); font-weight:900; line-height:1.3; letter-spacing:-.06em; text-wrap:balance; margin-bottom:8px;}
+  .page-heading p{font-size:14px; color:var(--text); line-height:1.8;}
+  .layout{display:grid; grid-template-columns:340px minmax(0,1fr); gap:18px; align-items:start;}
+
+  /* ===== 카드 ===== */
+  .card{background:var(--white); border:var(--border); box-shadow:3px 3px 0 var(--soft-shadow); min-width:0;}
+  .card>header{display:flex; flex-wrap:wrap; align-items:center; gap:4px 10px; padding:14px 18px 12px; font-size:15px; font-weight:850; letter-spacing:-.04em; border-bottom:1px solid var(--hair);}
+  .card>header .ic{color:var(--blue);}
+  .card>header .btn .ic{color:inherit;}
+  .card>.body{padding:16px 18px 18px;}
+
+  /* ===== 버튼 ===== */
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:40px; padding:8px 15px; border:var(--border); border-radius:0; background:var(--white); color:var(--ink); font-size:13px; font-weight:750; white-space:nowrap; transition:transform .15s, box-shadow .15s;}
+  .btn:hover:not([disabled]){transform:translate(-2px,-2px); box-shadow:3px 3px 0 var(--soft-shadow);}
+  .btn.pri{background:var(--blue); color:#fff;}
+  .btn.sm{min-height:32px; padding:5px 11px; font-size:12px;}
+  .btn.wide{width:100%; min-height:46px; font-size:14px;}
+
+  /* ===== 설정 패널 ===== */
+  .panel{position:sticky; top:78px; max-height:calc(100vh - 96px); max-height:calc(100dvh - 96px); overflow-y:auto; overscroll-behavior:contain;}
   .field{margin-bottom:18px;}
-  .field label{display:block; font-size:13px; font-weight:700; margin-bottom:7px;}
-  .field .hint{font-size:11px; color:var(--muted); font-weight:400;}
+  .field:last-child{margin-bottom:0;}
+  .lbl{display:flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:0; margin-bottom:7px;}
+  .lbl .n{font-size:10.5px; font-weight:700; color:var(--blue); letter-spacing:.06em; font-variant-numeric:tabular-nums;}
+  .hint{display:block; font-size:11.5px; color:var(--muted); line-height:1.6; margin-top:6px; font-weight:400;}
   textarea,select,input[type=text]{
-    width:100%; border:1px solid var(--line); border-radius:9px;
-    padding:9px 11px; font-size:14px; font-family:inherit; background:#fff; color:var(--ink);
+    width:100%; border:1px solid var(--ink); border-radius:0;
+    padding:9px 11px; font-size:14px; background:var(--white); color:var(--ink);
   }
-  textarea{resize:vertical; min-height:90px; line-height:1.5;}
-  select{appearance:none; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='3'><path d='M6 9l6 6 6-6'/></svg>"); background-repeat:no-repeat; background-position:right 11px center; padding-right:30px; cursor:pointer;}
-  input[type=range]{width:100%;}
-  .row{display:flex; gap:8px;}
-  .row > *{flex:1;}
+  textarea{resize:vertical; min-height:110px; line-height:1.6;}
+  textarea:focus,select:focus{outline:3px solid var(--teal); outline-offset:0;}
+  select{appearance:none; -webkit-appearance:none; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231a1a1a' stroke-width='2.5'><path d='M6 9l6 6 6-6'/></svg>"); background-repeat:no-repeat; background-position:right 11px center; padding-right:30px; cursor:pointer;}
+  input[type=range]{width:100%; accent-color:var(--blue); margin:4px 0 0;}
+  .val{margin-left:auto; font-size:11px; font-weight:800; color:var(--blue); border:1px solid var(--blue); background:#e8edff; padding:0 7px; line-height:1.6; font-variant-numeric:tabular-nums;}
   .seg{display:flex; flex-wrap:wrap; gap:6px;}
   .seg button{
-    flex:1 1 auto; border:1px solid var(--line); background:#fff; color:var(--ink);
-    border-radius:8px; padding:7px 6px; font-size:12.5px; cursor:pointer; font-family:inherit;
-    white-space:nowrap;
+    flex:1 1 28%; min-height:34px; border:1px solid var(--ink); background:var(--white); color:var(--ink);
+    border-radius:0; padding:6px 8px; font-size:12.5px; font-weight:700; white-space:nowrap;
   }
-  .seg button.active{background:var(--accent-soft); border-color:var(--accent); color:var(--accent); font-weight:700;}
-  .val{font-size:12px; color:var(--accent); font-weight:700; float:right;}
-  .toggle{display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; cursor:pointer;}
-  .toggle input{width:16px; height:16px; accent-color:var(--accent);}
-  .actions{display:flex; gap:8px; margin-top:8px;}
-  .btn{
-    flex:1; border:none; border-radius:10px; padding:12px; font-size:14px; font-weight:800;
-    cursor:pointer; font-family:inherit;
-  }
-  .btn-primary{background:var(--accent); color:#fff;}
-  .btn-primary:hover{background:#2f5ee0;}
-  .btn-ghost{background:#fff; border:1px solid var(--line); color:var(--ink);}
-  .divider{height:1px; background:var(--line); margin:20px 0;}
+  .seg button:hover:not(.active){background:var(--mint);}
+  .seg button.active{background:var(--teal); border-color:var(--ink); color:#fff;}
+  .stepper-group{display:flex; gap:10px;}
+  .stepper-group > div{flex:1; min-width:0;}
+  .stepper-group .cap{font-size:11px; color:var(--muted); margin-bottom:5px; font-weight:700;}
+  .stepper{display:flex; align-items:center; border:1px solid var(--ink); background:var(--white);}
+  .stepper button{width:36px; height:36px; border:0; background:var(--white); color:var(--blue); display:grid; place-items:center; padding:0;}
+  .stepper button:first-child{border-right:1px solid var(--ink);}
+  .stepper button:last-child{border-left:1px solid var(--ink);}
+  .stepper button:hover{background:var(--mint);}
+  .stepper .num{flex:1; text-align:center; font-size:16px; font-weight:850; font-variant-numeric:tabular-nums;}
+  .toggles{display:flex; flex-direction:column; gap:10px;}
+  .toggle{display:flex; align-items:center; gap:9px; font-size:13px; font-weight:650; cursor:pointer;}
+  .toggle input{width:16px; height:16px; margin:0; accent-color:var(--blue); flex:none;}
+  .divider{height:1px; background:var(--hair); margin:20px 0;}
+  .actions{display:flex; flex-direction:column; gap:10px;}
+  .trial-note{display:none; font-size:13px; line-height:1.7; font-weight:700; background:var(--warn-soft); border:1px solid var(--ink); padding:10px 12px; margin:0;}
+  .trial-note .ic{color:var(--warn); margin-right:4px;}
+  .trial-note a{color:var(--blue); font-weight:900; text-decoration:underline; text-underline-offset:3px;}
+  body.trial .trial-note{display:block;}
+  body.trial .print-btn{display:none;}
 
   /* ===== 미리보기 ===== */
-  .stage{flex:1; padding:34px; overflow-y:auto;}
-  .stage-bar{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:8px;}
-  .stage-bar .meta{font-size:13px; color:var(--muted);}
+  .stage-bar .meta{font-size:12px; color:var(--muted); font-weight:600; letter-spacing:0;}
+  .stage-bar .print-btn{margin-left:auto;}
+  .stage-body{padding:24px; background:var(--surface-2); overflow-x:auto;}
+  #papers{transform-origin:top left;}
+
+  /* ===== 바닥글 ===== */
+  .site-foot{margin-top:60px; padding:24px 0 30px; display:flex; flex-wrap:wrap; align-items:center; gap:10px 24px; border-top:2px solid var(--ink); font-size:11px; color:var(--muted);}
+  .site-foot .r{margin-left:auto;}
+  .site-foot a{text-decoration:underline; text-underline-offset:4px;}
+  .site-foot a:hover{color:var(--blue);}
+
+  /* ===== 연습장 종이(예전 그대로) ===== */
   .paper{
     background:var(--paper); margin:0 auto; box-shadow:0 8px 30px rgba(0,0,0,.10);
     padding:14mm; border-radius:2px;
+    /* 화면 껍데기 글꼴이 종이로 번지지 않게 예전 값으로 고정 */
+    font-family:'Nanum Gothic','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    font-size:16px; line-height:normal; letter-spacing:normal; color:#1f2328;
   }
   .paper.landscape{}
   .grid{display:grid; gap:0;}
@@ -99,15 +170,8 @@
   .pageno{text-align:center; font-size:11px; color:#aaa; margin-top:5mm;}
   .pagefoot{display:flex; justify-content:space-between; align-items:center; margin-top:5mm; font-size:10px; color:#b3b6bb; letter-spacing:.3px;}
   .pagefoot .foot-handle{font-weight:700; color:#9aa0a6;}
-  .stepper-group{display:flex; gap:10px;}
-  .stepper-group > div{flex:1;}
-  .stepper-group .cap{font-size:11px; color:var(--muted); margin-bottom:5px; text-align:center;}
-  .stepper{display:flex; align-items:center; border:1px solid var(--line); border-radius:8px; overflow:hidden;}
-  .stepper button{width:34px; height:34px; border:none; background:#fff; font-size:18px; line-height:1; cursor:pointer; color:var(--accent); font-weight:700;}
-  .stepper button:hover{background:var(--accent-soft);}
-  .stepper .num{flex:1; text-align:center; font-size:15px; font-weight:800;}
 
-  /* ===== 인쇄 ===== */
+  /* ===== 인쇄(예전 그대로) ===== */
   @media print{
     body{background:#fff;}
     .panel,.stage-bar{display:none !important;}
@@ -119,110 +183,154 @@
     body.trial .stage{display:none !important;}
     body.trial::after{content:"한글놀이 체험판에서는 미리보기만 할 수 있어요. 인쇄는 정식판(sososoop.com/hangul)에서 할 수 있어요."; display:block; padding:40px; font-size:18px; font-weight:700;}
   }
-  .trial-note{display:none; font-size:14px; line-height:1.6; font-weight:700; background:#fff7e0; border:1px solid #f0d58a; border-radius:8px; padding:10px 12px; margin:0;}
-  .trial-note a{color:#5b6ef5; font-weight:900;}
-  body.trial .trial-note{display:block;}
-  body.trial .print-btn{display:none;}
-  @media (max-width:760px){
-    body{flex-direction:column;}
-    .panel{width:100%; min-width:0; height:auto; position:static; border-right:none; border-bottom:1px solid var(--line);}
+  /* 인쇄 때 새 화면 껍데기(상단 바·제목·카드 테두리·바닥글)를 걷어내 종이만 남김 */
+  @media print{
+    .masthead,.page-heading,.site-foot{display:none !important;}
+    .shell{max-width:none; margin:0; padding:0;}
+    .layout{display:block;}
+    .stage{border:0; box-shadow:none; background:none;}
+    .stage-body{padding:0; background:none; overflow:visible;}
+    #papers{zoom:1 !important;}
+  }
+
+  /* ===== 좁은 화면 ===== */
+  @media (max-width:900px){
+    .layout{grid-template-columns:minmax(0,1fr);}
+    .panel{position:static; max-height:none; overflow:visible;}
+  }
+  @media (max-width:560px){
+    .masthead-inner,.shell{padding-left:16px; padding-right:16px;}
+    .masthead-inner{gap:12px;}
+    .app-name{padding-left:12px;}
+    .shell{padding-top:22px;}
+    .stage-body{padding:12px;}
+    .card>header{padding:12px 14px 10px;}
+    .card>.body{padding:14px 14px 16px;}
+  }
+  @media (max-width:400px){
+    .mh-link span{display:none;}
   }
 </style>
 </head>
 <body>
 
-<aside class="panel">
-  <h1>✍️ 글씨 쓰기 연습장</h1>
-  <p class="sub">텍스트를 넣고 인쇄하면 나만의 손글씨 연습지가 완성돼요.</p>
+<header class="masthead">
+  <div class="masthead-inner">
+    <span class="brand"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAAAXNSR0IArs4c6QAAAQhlWElmTU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAAUAAAABAAAAagEoAAMAAAABAAIAAAExAAIAAAA5AAAAcgE7AAIAAAANAAAArIdpAAQAAAABAAAAugAAAAAAAAC0AAAAAQAAALQAAAABQ2FudmEgZG9jPURBSE9xamRZM3FvIHVzZXI9VUFFMkl1QUpNZ0kgYnJhbmQ9QkFFMkluQ3lrRUEAAHNldW5neXVuIGxlZQAAAAaQAAAHAAAABDAyMTCRAQAHAAAABAECAwCgAAAHAAAABDAxMDCgAQADAAAAAQABAACgAgAEAAAAAQAAAICgAwAEAAAAAQAAAIAAAAAA5RWdCQAAAAlwSFlzAAAbrwAAG68BXhqRHAAABkZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDYuMC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyI+CiAgICAgICAgIDxleGlmOkNvbG9yU3BhY2U+NjU1MzU8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjIzNTE8L2V4aWY6UGl4ZWxYRGltZW5zaW9uPgogICAgICAgICA8ZXhpZjpFeGlmVmVyc2lvbj4wMjEwPC9leGlmOkV4aWZWZXJzaW9uPgogICAgICAgICA8ZXhpZjpGbGFzaFBpeFZlcnNpb24+MDEwMDwvZXhpZjpGbGFzaFBpeFZlcnNpb24+CiAgICAgICAgIDxleGlmOlBpeGVsWURpbWVuc2lvbj4yMzUxPC9leGlmOlBpeGVsWURpbWVuc2lvbj4KICAgICAgICAgPGV4aWY6Q29tcG9uZW50c0NvbmZpZ3VyYXRpb24+CiAgICAgICAgICAgIDxyZGY6U2VxPgogICAgICAgICAgICAgICA8cmRmOmxpPjE8L3JkZjpsaT4KICAgICAgICAgICAgICAgPHJkZjpsaT4yPC9yZGY6bGk+CiAgICAgICAgICAgICAgIDxyZGY6bGk+MzwvcmRmOmxpPgogICAgICAgICAgICAgICA8cmRmOmxpPjA8L3JkZjpsaT4KICAgICAgICAgICAgPC9yZGY6U2VxPgogICAgICAgICA8L2V4aWY6Q29tcG9uZW50c0NvbmZpZ3VyYXRpb24+CiAgICAgICAgIDx4bXA6Q3JlYXRvclRvb2w+Q2FudmEgZG9jPURBSE9xamRZM3FvIHVzZXI9VUFFMkl1QUpNZ0kgYnJhbmQ9QkFFMkluQ3lrRUE8L3htcDpDcmVhdG9yVG9vbD4KICAgICAgICAgPHRpZmY6UmVzb2x1dGlvblVuaXQ+MjwvdGlmZjpSZXNvbHV0aW9uVW5pdD4KICAgICAgICAgPHRpZmY6T3JpZW50YXRpb24+MTwvdGlmZjpPcmllbnRhdGlvbj4KICAgICAgICAgPHRpZmY6WFJlc29sdXRpb24+MTgwPC90aWZmOlhSZXNvbHV0aW9uPgogICAgICAgICA8dGlmZjpZUmVzb2x1dGlvbj4xODA8L3RpZmY6WVJlc29sdXRpb24+CiAgICAgICAgIDxkYzp0aXRsZT4KICAgICAgICAgICAgPHJkZjpBbHQ+CiAgICAgICAgICAgICAgIDxyZGY6bGkgeG1sOmxhbmc9IngtZGVmYXVsdCI+7KCc66qpIOyXhuuKlCDrlJTsnpDsnbggLSAyPC9yZGY6bGk+CiAgICAgICAgICAgIDwvcmRmOkFsdD4KICAgICAgICAgPC9kYzp0aXRsZT4KICAgICAgICAgPGRjOmNyZWF0b3I+CiAgICAgICAg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" alt="" width="32" height="32"><span>소소숲<span class="brand-sub"> : 지혜의 기록소</span></span></span>
+    <span class="app-name">글씨연습장</span>
+    <div class="mh-right">
+      <a class="mh-link" href="guide.html" target="_blank" rel="noopener" aria-label="사용법 보기"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4zM20 4h-7a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h7z"/></svg><span>사용법</span></a>
+    </div>
+  </div>
+</header>
 
-  <div class="field">
-    <label>연습할 글</label>
-    <textarea id="text" placeholder="여기에 연습할 글을 입력하세요."></textarea>
+<div class="shell">
+  <div class="page-heading">
+    <span class="eyebrow">HANDWRITING PRACTICE SHEET</span>
+    <h1>나만의 <em>글씨연습장</em> 만들기</h1>
+    <p>연습할 글을 넣고 인쇄하면 A4 손글씨 연습지가 완성돼요.</p>
   </div>
 
-  <div class="field">
-    <label>글꼴</label>
-    <select id="font"></select>
-  </div>
+  <div class="layout">
+    <aside class="panel card">
+      <header><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16zM13 6l3 3"/></svg>연습장 설정</header>
+      <div class="body">
+        <div class="field">
+          <label class="lbl" for="text"><span class="n">01</span>연습할 글</label>
+          <textarea id="text" placeholder="여기에 연습할 글을 입력하세요."></textarea>
+        </div>
 
-  <div class="field">
-    <label>칸 수</label>
-    <div class="stepper-group">
-      <div>
-        <div class="cap">가로 칸</div>
-        <div class="stepper"><button data-step="cols" data-d="-1">−</button><span class="num" id="colsNum"></span><button data-step="cols" data-d="1">＋</button></div>
+        <div class="field">
+          <label class="lbl" for="font"><span class="n">02</span>글꼴</label>
+          <select id="font"></select>
+        </div>
+
+        <div class="field">
+          <div class="lbl"><span class="n">03</span>칸 수</div>
+          <div class="stepper-group">
+            <div>
+              <div class="cap">가로 칸</div>
+              <div class="stepper"><button data-step="cols" data-d="-1" aria-label="가로 칸 줄이기"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="num" id="colsNum"></span><button data-step="cols" data-d="1" aria-label="가로 칸 늘리기"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+            </div>
+            <div>
+              <div class="cap">세로 줄</div>
+              <div class="stepper"><button data-step="rows" data-d="-1" aria-label="세로 줄 줄이기"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><span class="num" id="rowsNum"></span><button data-step="rows" data-d="1" aria-label="세로 줄 늘리기"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div>
+            </div>
+          </div>
+          <span class="hint">칸 크기는 A4 용지에 맞춰 자동으로 조절돼요.</span>
+        </div>
+
+        <div class="field">
+          <label class="lbl" for="size"><span class="n">04</span>글자 크기 <span class="val" id="sizeVal"></span></label>
+          <input type="range" id="size" min="40" max="85" step="1">
+          <span class="hint">칸 대비 글자가 차지하는 비율이에요.</span>
+        </div>
+
+        <div class="field">
+          <div class="lbl"><span class="n">05</span>안내선</div>
+          <div class="seg" id="guide">
+            <button data-v="none">없음</button>
+            <button data-v="cross">십자</button>
+            <button data-v="box">십자+네모</button>
+            <button data-v="diamond">십자+마름모</button>
+            <button data-v="rice">격자(米)</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="lbl"><span class="n">06</span>글씨 모드</div>
+          <div class="seg" id="mode">
+            <button data-v="trace">회색 따라쓰기</button>
+            <button data-v="black">검은 글씨</button>
+            <button data-v="blank">빈칸 연습</button>
+          </div>
+          <span class="hint" id="modeHint"></span>
+        </div>
+
+        <div class="field">
+          <div class="lbl"><span class="n">07</span>용지 방향</div>
+          <div class="seg" id="orient">
+            <button data-v="portrait">세로</button>
+            <button data-v="landscape">가로</button>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="toggles">
+          <label class="toggle"><input type="checkbox" id="removeSpace"> 공백 제거</label>
+          <label class="toggle"><input type="checkbox" id="removeBreak"> 줄바꿈 무시(이어 붙이기)</label>
+          <label class="toggle"><input type="checkbox" id="practiceLine"> 글자 줄 아래에 빈 줄 추가</label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="actions">
+          <button class="btn pri wide print-btn" onclick="window.print()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M6 14h12v7H6z"/></svg>인쇄 / PDF 저장</button>
+          <p class="trial-note"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>한글놀이 체험판에서는 미리보기만 할 수 있어요.<br>인쇄·PDF 저장은 <a href="https://sososoop.com/hangul" target="_blank" rel="noopener">정식판</a>에서 할 수 있어요.</p>
+          <button class="btn wide" id="resetBtn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5"/></svg>기본값으로</button>
+        </div>
       </div>
-      <div>
-        <div class="cap">세로 줄</div>
-        <div class="stepper"><button data-step="rows" data-d="-1">−</button><span class="num" id="rowsNum"></span><button data-step="rows" data-d="1">＋</button></div>
+    </aside>
+
+    <main class="stage card">
+      <header class="stage-bar">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h8l5 5v15H6zM14 2v5h5"/></svg>미리보기
+        <span class="meta" id="meta"></span>
+        <button class="btn sm pri print-btn" onclick="window.print()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M6 14h12v7H6z"/></svg>인쇄</button>
+      </header>
+      <div class="stage-body">
+        <div id="papers"></div>
       </div>
-    </div>
-    <span class="hint">칸 크기는 A4 용지에 맞춰 자동으로 조절돼요.</span>
+    </main>
   </div>
 
-  <div class="field">
-    <label>글자 크기 <span class="val" id="sizeVal"></span></label>
-    <input type="range" id="size" min="40" max="85" step="1">
-    <span class="hint">칸 대비 글자가 차지하는 비율이에요.</span>
-  </div>
-
-  <div class="field">
-    <label>안내선</label>
-    <div class="seg" id="guide">
-      <button data-v="none">없음</button>
-      <button data-v="cross">십자</button>
-      <button data-v="box">십자+네모</button>
-      <button data-v="diamond">십자+마름모</button>
-      <button data-v="rice">격자(米)</button>
-    </div>
-  </div>
-
-  <div class="field">
-    <label>글씨 모드</label>
-    <div class="seg" id="mode">
-      <button data-v="trace">회색 따라쓰기</button>
-      <button data-v="black">검은 글씨</button>
-      <button data-v="blank">빈칸 연습</button>
-    </div>
-    <span class="hint" id="modeHint"></span>
-  </div>
-
-  <div class="field">
-    <label>용지 방향</label>
-    <div class="seg" id="orient">
-      <button data-v="portrait">세로</button>
-      <button data-v="landscape">가로</button>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <label class="toggle"><input type="checkbox" id="removeSpace"> 공백 제거</label>
-  <div style="height:10px"></div>
-  <label class="toggle"><input type="checkbox" id="removeBreak"> 줄바꿈 무시(이어 붙이기)</label>
-  <div style="height:10px"></div>
-  <label class="toggle"><input type="checkbox" id="practiceLine"> 글자 줄 아래에 빈 줄 추가</label>
-
-  <div class="divider"></div>
-
-  <div class="actions">
-    <button class="btn btn-primary print-btn" onclick="window.print()">🖨️ 인쇄 / PDF 저장</button>
-    <p class="trial-note">🔒 한글놀이 체험판에서는 미리보기만 할 수 있어요.<br>인쇄·PDF 저장은 <a href="https://sososoop.com/hangul" target="_blank" rel="noopener">정식판</a>에서 할 수 있어요.</p>
-  </div>
-  <div class="actions">
-    <button class="btn btn-ghost" id="resetBtn">기본값으로</button>
-  </div>
-  <p style="text-align:center; margin:14px 0 0; font-size:13px;">
-    <a href="guide.html" target="_blank" rel="noopener" style="color:var(--muted); text-decoration:none; font-weight:600;">📖 사용법 보기</a>
-  </p>
-</aside>
-
-<main class="stage">
-  <div class="stage-bar">
-    <div class="meta" id="meta"></div>
-  </div>
-  <div id="papers"></div>
-</main>
+  <footer class="site-foot">
+    <span>글씨연습장 · A4 용지 기준 손글씨 연습지</span>
+    <a href="guide.html" target="_blank" rel="noopener">사용법 보기</a>
+    <span class="r">소소숲 : 지혜의 기록소 · 언어재활사 이승윤</span>
+  </footer>
+</div>
 
 <script>
 const FONTS = [
@@ -357,7 +465,7 @@ function render(){
     const foot=document.createElement("div");
     foot.className="pagefoot";
     const fh=document.createElement("span");
-    fh.className="foot-handle"; fh.textContent="@slp_irudassam";
+    fh.className="foot-handle"; fh.textContent="소소숲 : 지혜의 기록소";
     const fn=document.createElement("span");
     fn.textContent=`${pi+1} / ${pages.length}`;
     foot.appendChild(fh); foot.appendChild(fn);
@@ -368,7 +476,22 @@ function render(){
 
   document.getElementById("meta").textContent =
     `A4 ${landscape?"가로":"세로"} · 한 줄 ${cols}칸 · 총 ${pages.length}페이지`;
+  fitPapers();
 }
+
+// ---- 화면 미리보기만 칸 폭에 맞춰 줄이기(인쇄 크기는 그대로) ----
+function fitPapers(){
+  const box=document.getElementById("papers");
+  const host=box.parentElement;
+  const cs=getComputedStyle(host);
+  const avail=host.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+  const paperPx=(S.orient==="landscape"?297:210)*96/25.4;
+  const z=Math.min(1, avail/paperPx);
+  box.style.zoom = z<0.999 ? String(Math.floor(z*1000)/1000) : "";
+}
+window.addEventListener("resize",fitPapers);
+window.addEventListener("beforeprint",()=>{document.getElementById("papers").style.zoom="";});
+window.addEventListener("afterprint",fitPapers);
 
 // ---- UI 바인딩 ----
 function buildFontSelect(){
