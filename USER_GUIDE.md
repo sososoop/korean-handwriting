@@ -2,8 +2,8 @@
 
 받아쓰기 · 따라쓰기 · 글씨 연습지를 몇 번의 클릭으로 만들어 인쇄하는 웹앱입니다.
 
-- **웹앱:** https://slp-irudassam.github.io/korean-handwriting/
-- **보기 좋은 안내 페이지:** [guide.html](guide.html) (웹앱 왼쪽 아래 `📖 사용법 보기`에서도 열 수 있어요)
+- **웹앱:** https://sososoop.github.io/korean-handwriting/
+- **보기 좋은 안내 페이지:** [guide.html](guide.html) (웹앱 위쪽 바의 `사용법`에서도 열 수 있어요)
 
 ---
 
@@ -102,4 +102,4 @@
 
 ---
 
-글씨 쓰기 연습장 · **@slp_irudassam**
+글씨 쓰기 연습장 · **소소숲 : 지혜의 기록소**

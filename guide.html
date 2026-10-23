@@ -3,172 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>글씨 쓰기 연습장 · 사용설명서</title>
+<title>글씨연습장 사용설명서 · 소소숲 : 지혜의 기록소</title>
 <style>
+  /* 소소숲 기본 디자인(센터 대시보드) — 2026-10-23, 글씨연습장 index.html 과 같은 토큰. 밝은 화면만. */
   :root{
-    --bg:#f4f5f7; --panel:#ffffff; --ink:#1f2328; --muted:#6b7280;
-    --line:#e3e6ea; --accent:#3b6ef5; --accent-soft:#eaf0ff;
-    --guide:#c9ccd1; --paper:#ffffff;
+    --ink:#1a1a1a; --muted:#6b7280; --paper:#fffdf7; --white:#fff; --hair:#1a1a1a22; --grid:#1a1a1a0b;
+    --blue:#3b5bdb; --blue-dark:#2f49b0; --teal:#12b5a5; --teal-dark:#0e9488; --mint:#e1f6f2; --info-soft:#e8edff;
+    --nav:#141e10; --nav-ink:#f5f0e8; --text:#61666c; --ink-2:#4b5652; --soft-shadow:#dddccf; --surface-2:#f4f2ea;
+    --guide:#c9ccd1; --border:2px solid var(--ink);
+    --font:system-ui,-apple-system,BlinkMacSystemFont,Pretendard,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+    color-scheme:light;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    font-family:'Nanum Gothic','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
-    background:var(--bg); color:var(--ink); line-height:1.65;
-    -webkit-font-smoothing:antialiased;
+    font-family:var(--font); color:var(--ink); line-height:1.7; letter-spacing:-.02em; -webkit-font-smoothing:antialiased;
+    background-color:var(--paper);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:40px 40px;
   }
-  a{color:var(--accent); text-decoration:none;}
-  a:hover{text-decoration:underline;}
-  .wrap{max-width:860px; margin:0 auto; padding:0 20px 80px;}
+  a{color:var(--blue); text-decoration:none;}
+  a:hover{text-decoration:underline; text-underline-offset:3px;}
+  :focus-visible{outline:3px solid var(--teal); outline-offset:3px;}
+  svg.ic{width:1.1em;height:1.1em;vertical-align:-.18em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
-  /* ===== 헤더 ===== */
-  header{
-    background:linear-gradient(180deg,#fff 0%, #f7f9ff 100%);
-    border-bottom:1px solid var(--line);
-    padding:44px 20px 40px; text-align:center; margin-bottom:36px;
-  }
-  header .inner{max-width:860px; margin:0 auto;}
-  header h1{font-size:30px; font-weight:800; margin:0 0 8px; letter-spacing:-.5px;}
-  header p{font-size:15px; color:var(--muted); margin:0 0 22px;}
+  /* ===== 상단 바 ===== */
+  .masthead{background:var(--nav); color:var(--nav-ink);}
+  .masthead-inner{max-width:920px; min-height:60px; margin:auto; padding:0 32px; display:flex; align-items:center; gap:16px;}
+  .brand{display:flex; align-items:center; gap:10px; font-size:16px; font-weight:750; white-space:nowrap;}
+  .brand img{width:32px; height:32px; object-fit:contain;}
+  .brand-sub{font-weight:450; opacity:.85; margin-left:3px; font-size:14px;}
+  .app-name{font-size:13px; font-weight:750; border-left:1px solid #f5f0e833; padding-left:16px; white-space:nowrap;}
+  .mh-link{margin-left:auto; display:inline-flex; align-items:center; gap:6px; border:1px solid #f5f0e844; color:var(--nav-ink); font-size:12px; font-weight:700; padding:6px 12px; white-space:nowrap;}
+  .mh-link:hover{background:#ffffff14; text-decoration:none;}
+
+  .wrap{max-width:920px; margin:0 auto; padding:0 32px 20px;}
+
+  /* ===== 제목 ===== */
+  .page-heading{padding:30px 0 30px;}
+  .eyebrow{display:table; font-size:11px; font-weight:800; letter-spacing:.1em; color:var(--blue); background:var(--white); border:1px solid var(--blue); padding:5px 10px; margin:0 0 14px;}
+  .page-heading h1{font-size:clamp(26px,3vw,36px); font-weight:900; line-height:1.3; letter-spacing:-.06em; margin:0 0 6px; word-break:keep-all;}
+  .page-heading h1 em{font-style:normal; color:var(--blue);}
+  .page-heading p{font-size:14.5px; color:var(--text); margin:0 0 18px; word-break:keep-all;}
   .cta{
-    display:inline-flex; align-items:center; gap:8px;
-    background:var(--accent); color:#fff; font-weight:800; font-size:15px;
-    padding:12px 22px; border-radius:11px;
-    box-shadow:0 6px 18px rgba(59,110,245,.28);
+    display:inline-flex; align-items:center; gap:8px; min-height:44px;
+    background:var(--blue); color:#fff; font-weight:800; font-size:14px;
+    padding:9px 18px; border:var(--border); transition:transform .15s,box-shadow .15s;
   }
-  .cta:hover{background:#2f5ee0; text-decoration:none;}
+  .cta:hover{text-decoration:none; transform:translate(-2px,-2px); box-shadow:3px 3px 0 var(--soft-shadow);}
 
   /* ===== 섹션 ===== */
-  section{margin-bottom:44px;}
-  .sec-head{display:flex; align-items:baseline; gap:10px; margin:0 0 18px;}
-  .sec-head .no{
-    font-size:13px; font-weight:800; color:#fff; background:var(--accent);
-    width:26px; height:26px; border-radius:50%; display:inline-flex;
-    align-items:center; justify-content:center; flex:0 0 auto; align-self:center;
-  }
-  .sec-head h2{font-size:21px; font-weight:800; margin:0; letter-spacing:-.3px;}
+  section{margin-bottom:34px;}
+  .sec-head{display:flex; align-items:center; gap:10px; margin:0 0 14px;}
+  .sec-head .no{font-size:11px; font-weight:700; letter-spacing:.05em; color:var(--blue); border:1px solid var(--blue); background:var(--info-soft); padding:0 7px; flex:0 0 auto;}
+  .sec-head h2{font-size:19px; font-weight:850; margin:0; letter-spacing:-.04em;}
 
-  .card{
-    background:var(--panel); border:1px solid var(--line); border-radius:14px;
-    padding:22px 24px; box-shadow:0 1px 2px rgba(0,0,0,.03);
-  }
+  .card{background:var(--white); border:var(--border); padding:18px 22px; box-shadow:3px 3px 0 var(--soft-shadow);}
   .card + .card{margin-top:14px;}
 
   /* 빠른 시작 스텝 */
   .steps{display:grid; gap:14px;}
   @media(min-width:640px){ .steps{grid-template-columns:repeat(2,1fr);} }
-  .step{
-    background:var(--panel); border:1px solid var(--line); border-radius:14px;
-    padding:18px 20px; position:relative;
-  }
-  .step .badge{
-    font-size:12px; font-weight:800; color:var(--accent); background:var(--accent-soft);
-    border-radius:7px; padding:3px 9px; display:inline-block; margin-bottom:10px;
-  }
-  .step h3{font-size:16px; margin:0 0 5px; font-weight:800;}
-  .step p{margin:0; font-size:14px; color:var(--muted);}
+  .step{background:var(--white); border:var(--border); padding:16px 20px; box-shadow:3px 3px 0 var(--soft-shadow);}
+  .step .badge{font-size:11px; font-weight:800; letter-spacing:.08em; color:var(--teal-dark); background:var(--mint); border:1px solid var(--teal); padding:1px 8px; display:inline-block; margin-bottom:10px;}
+  .step h3{font-size:15.5px; margin:0 0 4px; font-weight:850; letter-spacing:-.03em;}
+  .step p{margin:0; font-size:14px; color:var(--text);}
+  .step p b{color:var(--ink);}
 
   /* 기능 표 */
   .feat{display:grid; gap:0;}
-  .feat .row{
-    display:grid; grid-template-columns:130px 1fr; gap:14px;
-    padding:14px 0; border-bottom:1px solid var(--line);
-  }
+  .feat .row{display:grid; grid-template-columns:130px 1fr; gap:14px; padding:12px 0; border-bottom:1px solid var(--hair);}
   .feat .row:last-child{border-bottom:none;}
-  .feat .k{font-weight:800; font-size:14.5px;}
-  .feat .v{font-size:14px; color:#444;}
-  .feat .v .tag{
-    display:inline-block; background:#f0f2f5; border-radius:6px;
-    padding:1px 7px; font-size:12.5px; font-weight:700; color:#555; margin:0 3px 3px 0;
-  }
+  .feat .k{font-weight:850; font-size:14px;}
+  .feat .v{font-size:14px; color:var(--ink-2);}
+  .feat .v .tag{display:inline-block; background:var(--white); border:1px solid var(--ink); padding:0 7px; font-size:12.5px; font-weight:700; color:var(--ink); margin:0 3px 3px 0;}
   @media(max-width:520px){ .feat .row{grid-template-columns:1fr; gap:4px;} }
 
   /* 안내선 미리보기 */
   .guides{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px;}
   .gcell{text-align:center;}
-  .gcell .box{
-    aspect-ratio:1/1; border:1px solid var(--guide); border-radius:8px;
-    background:#fff; margin-bottom:8px; overflow:hidden;
-  }
+  .gcell .box{aspect-ratio:1/1; border:1px solid var(--ink); background:#fff; margin-bottom:8px; overflow:hidden;}
   .gcell svg{width:100%; height:100%; display:block;}
-  .gcell .name{font-size:13px; font-weight:800;}
-  .gcell .use{font-size:11.5px; color:var(--muted); margin-top:2px; line-height:1.4;}
+  .gcell .name{font-size:13px; font-weight:850;}
+  .gcell .use{font-size:11.5px; color:var(--muted); margin-top:2px; line-height:1.45;}
 
   /* 모드 카드 */
   .modes{display:grid; gap:12px;}
   @media(min-width:640px){ .modes{grid-template-columns:repeat(3,1fr);} }
-  .mode{
-    border:1px solid var(--line); border-radius:12px; padding:16px; background:#fff;
-  }
-  .mode .sample{
-    font-size:34px; text-align:center; padding:8px 0 10px; line-height:1;
-    font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
-  }
+  .mode{border:var(--border); padding:16px; background:var(--white); box-shadow:3px 3px 0 var(--soft-shadow);}
+  .mode .sample{font-size:34px; text-align:center; padding:8px 0 10px; line-height:1; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;}
   .mode .sample.trace{color:#c4c8ce;}
   .mode .sample.black{color:#222;}
   .mode .sample.blank{color:#d5d8dd; letter-spacing:2px;}
-  .mode h3{margin:0 0 4px; font-size:15px; font-weight:800; text-align:center;}
+  .mode h3{margin:0 0 4px; font-size:15px; font-weight:850; text-align:center;}
   .mode p{margin:0; font-size:12.5px; color:var(--muted); text-align:center;}
 
   /* 레시피 */
-  .recipe{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px 22px;}
+  .recipe{background:var(--white); border:var(--border); padding:0 22px 16px; box-shadow:3px 3px 0 var(--soft-shadow);}
   .recipe + .recipe{margin-top:14px;}
-  .recipe h3{margin:0 0 12px; font-size:16px; font-weight:800; display:flex; align-items:center; gap:8px;}
+  .recipe h3{margin:0 -22px 12px; padding:12px 22px 10px; border-bottom:1px solid var(--hair); font-size:15.5px; font-weight:850; letter-spacing:-.03em; display:flex; align-items:center; gap:8px;}
+  .recipe h3 .ic{color:var(--blue);}
   .recipe ol{margin:0; padding-left:20px;}
-  .recipe li{font-size:14px; margin-bottom:5px;}
-  .recipe .chip{
-    display:inline-block; background:var(--accent-soft); color:var(--accent);
-    font-weight:700; font-size:12.5px; border-radius:6px; padding:1px 7px;
-  }
+  .recipe li{font-size:14px; margin-bottom:5px; color:var(--ink-2);}
+  .recipe .chip{display:inline-block; background:var(--info-soft); color:var(--blue); border:1px solid var(--blue); font-weight:700; font-size:12.5px; padding:0 7px;}
 
   /* FAQ */
-  details{
-    background:var(--panel); border:1px solid var(--line); border-radius:12px;
-    padding:0 18px; margin-bottom:10px;
-  }
-  details summary{
-    cursor:pointer; padding:15px 0; font-weight:800; font-size:15px; list-style:none;
-    display:flex; justify-content:space-between; align-items:center; gap:10px;
-  }
+  details{background:var(--white); border:var(--border); padding:0 18px; margin-bottom:10px;}
+  details summary{cursor:pointer; padding:13px 0; font-weight:850; font-size:14.5px; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:10px;}
   details summary::-webkit-details-marker{display:none;}
-  details summary::after{content:"+"; color:var(--accent); font-size:20px; font-weight:800;}
+  details summary::after{content:"+"; color:var(--blue); font-size:20px; font-weight:800;}
+  details[open] summary{border-bottom:1px solid var(--hair);}
   details[open] summary::after{content:"−";}
-  details .body{padding:0 0 16px; font-size:14px; color:#444;}
+  details .body{padding:12px 0 14px; font-size:14px; color:var(--ink-2);}
 
   /* 인쇄 팁 리스트 */
   .checklist{list-style:none; margin:0; padding:0;}
-  .checklist li{
-    padding:9px 0 9px 30px; position:relative; font-size:14.5px; border-bottom:1px solid var(--line);
-  }
+  .checklist li{padding:9px 0 9px 28px; position:relative; font-size:14.5px; border-bottom:1px solid var(--hair);}
   .checklist li:last-child{border-bottom:none;}
-  .checklist li::before{
-    content:"✓"; position:absolute; left:0; top:9px; color:var(--accent); font-weight:800;
-  }
-  .checklist b{font-weight:800;}
+  .checklist li::before{content:"✓"; position:absolute; left:2px; top:9px; color:var(--teal-dark); font-weight:900;}
+  .checklist b{font-weight:850;}
 
-  .note{font-size:13px; color:var(--muted); margin-top:10px;}
-  footer{
-    text-align:center; color:var(--muted); font-size:13px;
-    border-top:1px solid var(--line); padding-top:28px; margin-top:10px;
+  .note{background:var(--mint); border:1px solid var(--teal); padding:12px 16px; font-size:13.5px; color:var(--ink-2); margin-top:14px;}
+  footer{margin-top:50px; padding:20px 0 30px; border-top:2px solid var(--ink); display:flex; flex-wrap:wrap; gap:6px 24px; font-size:11.5px; color:var(--muted);}
+  footer a{color:inherit; text-decoration:underline; text-underline-offset:3px;}
+  footer .r{margin-left:auto; font-weight:700; color:var(--ink-2);}
+
+  @media(max-width:560px){
+    .masthead-inner,.wrap{padding-left:16px; padding-right:16px;}
+    .brand>span{display:none;} .app-name{border-left:0; padding-left:0;}
+    .card{padding:14px 16px;} .recipe{padding:0 16px 14px;} .recipe h3{margin:0 -16px 12px; padding:12px 16px 10px;}
   }
-  footer .handle{font-weight:800; color:#9aa0a6;}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="inner">
-    <h1>✍️ 글씨 쓰기 연습장 사용설명서</h1>
-    <p>받아쓰기 · 따라쓰기 · 글씨 연습지를 몇 번의 클릭으로 만들어 인쇄하세요.</p>
-    <a class="cta" href="https://slp-irudassam.github.io/korean-handwriting/">웹앱 바로 열기 →</a>
+<header class="masthead">
+  <div class="masthead-inner">
+    <span class="brand"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAAAXNSR0IArs4c6QAAAQhlWElmTU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUAAAABAAAAYgEbAAUAAAABAAAAagEoAAMAAAABAAIAAAExAAIAAAA5AAAAcgE7AAIAAAANAAAArIdpAAQAAAABAAAAugAAAAAAAAC0AAAAAQAAALQAAAABQ2FudmEgZG9jPURBSE9xamRZM3FvIHVzZXI9VUFFMkl1QUpNZ0kgYnJhbmQ9QkFFMkluQ3lrRUEAAHNldW5neXVuIGxlZQAAAAaQAAAHAAAABDAyMTCRAQAHAAAABAECAwCgAAAHAAAABDAxMDCgAQADAAAAAQABAACgAgAEAAAAAQAAAICgAwAEAAAAAQAAAIAAAAAA5RWdCQAAAAlwSFlzAAAbrwAAG68BXhqRHAAABkZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDYuMC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyI+CiAgICAgICAgIDxleGlmOkNvbG9yU3BhY2U+NjU1MzU8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjIzNTE8L2V4aWY6UGl4ZWxYRGltZW5zaW9uPgogICAgICAgICA8ZXhpZjpFeGlmVmVyc2lvbj4wMjEwPC9leGlmOkV4aWZWZXJzaW9uPgogICAgICAgICA8ZXhpZjpGbGFzaFBpeFZlcnNpb24+MDEwMDwvZXhpZjpGbGFzaFBpeFZlcnNpb24+CiAgICAgICAgIDxleGlmOlBpeGVsWURpbWVuc2lvbj4yMzUxPC9leGlmOlBpeGVsWURpbWVuc2lvbj4KICAgICAgICAgPGV4aWY6Q29tcG9uZW50c0NvbmZpZ3VyYXRpb24+CiAgICAgICAgICAgIDxyZGY6U2VxPgogICAgICAgICAgICAgICA8cmRmOmxpPjE8L3JkZjpsaT4KICAgICAgICAgICAgICAgPHJkZjpsaT4yPC9yZGY6bGk+CiAgICAgICAgICAgICAgIDxyZGY6bGk+MzwvcmRmOmxpPgogICAgICAgICAgICAgICA8cmRmOmxpPjA8L3JkZjpsaT4KICAgICAgICAgICAgPC9yZGY6U2VxPgogICAgICAgICA8L2V4aWY6Q29tcG9uZW50c0NvbmZpZ3VyYXRpb24+CiAgICAgICAgIDx4bXA6Q3JlYXRvclRvb2w+Q2FudmEgZG9jPURBSE9xamRZM3FvIHVzZXI9VUFFMkl1QUpNZ0kgYnJhbmQ9QkFFMkluQ3lrRUE8L3htcDpDcmVhdG9yVG9vbD4KICAgICAgICAgPHRpZmY6UmVzb2x1dGlvblVuaXQ+MjwvdGlmZjpSZXNvbHV0aW9uVW5pdD4KICAgICAgICAgPHRpZmY6T3JpZW50YXRpb24+MTwvdGlmZjpPcmllbnRhdGlvbj4KICAgICAgICAgPHRpZmY6WFJlc29sdXRpb24+MTgwPC90aWZmOlhSZXNvbHV0aW9uPgogICAgICAgICA8dGlmZjpZUmVzb2x1dGlvbj4xODA8L3RpZmY6WVJlc29sdXRpb24+CiAgICAgICAgIDxkYzp0aXRsZT4KICAgICAgICAgICAgPHJkZjpBbHQ+CiAgICAgICAgICAgICAgIDxyZGY6bGkgeG1sOmxhbmc9IngtZGVmYXVsdCI+7KCc66qpIOyXhuuKlCDrlJTsnpDsnbggLSAyPC9yZGY6bGk+CiAgICAgICAgICAgIDwvcmRmOkFsdD4KICAgICAgICAgPC9kYzp0aXRsZT4KICAgICAgICAgPGRjOmNyZWF0b3I+CiAgICAgICAg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" alt="" width="32" height="32"><span>소소숲<span class="brand-sub"> : 지혜의 기록소</span></span></span>
+    <span class="app-name">글씨연습장 사용설명서</span>
+    <a class="mh-link" href="https://sososoop.github.io/korean-handwriting/"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16zM13 6l3 3"/></svg>글씨연습장 열기</a>
   </div>
 </header>
 
 <div class="wrap">
 
+  <div class="page-heading">
+    <span class="eyebrow">GUIDE / 사용설명서</span>
+    <h1>글씨 쓰기 연습장, 이렇게 <em>써요</em></h1>
+    <p>받아쓰기 · 따라쓰기 · 글씨 연습지를 몇 번의 클릭으로 만들어 인쇄하세요.</p>
+    <a class="cta" href="https://sososoop.github.io/korean-handwriting/">웹앱 바로 열기 →</a>
+  </div>
+
   <!-- 1. 빠른 시작 -->
   <section>
-    <div class="sec-head"><span class="no">1</span><h2>30초 빠른 시작</h2></div>
+    <div class="sec-head"><span class="no">01</span><h2>30초 빠른 시작</h2></div>
     <div class="steps">
       <div class="step">
         <span class="badge">STEP 1</span>
@@ -188,14 +176,14 @@
       <div class="step">
         <span class="badge">STEP 4</span>
         <h3>인쇄 / PDF 저장</h3>
-        <p><b>🖨️ 인쇄 / PDF 저장</b> 버튼을 눌러 종이로 뽑거나 PDF로 저장해요.</p>
+        <p><b>인쇄 / PDF 저장</b> 버튼을 눌러 종이로 뽑거나 PDF로 저장해요.</p>
       </div>
     </div>
   </section>
 
   <!-- 2. 설정 한눈에 -->
   <section>
-    <div class="sec-head"><span class="no">2</span><h2>설정 한눈에 보기</h2></div>
+    <div class="sec-head"><span class="no">02</span><h2>설정 한눈에 보기</h2></div>
     <div class="card">
       <div class="feat">
         <div class="row"><div class="k">연습할 글</div><div class="v">입력한 줄이 가로 칸 수보다 길면 자동으로 다음 줄로 넘어가요. 빈 줄을 넣으면 연습지에도 빈 줄이 생깁니다.</div></div>
@@ -212,7 +200,7 @@
 
   <!-- 3. 안내선 -->
   <section>
-    <div class="sec-head"><span class="no">3</span><h2>안내선 종류 미리보기</h2></div>
+    <div class="sec-head"><span class="no">03</span><h2>안내선 종류 미리보기</h2></div>
     <div class="card">
       <div class="guides">
         <div class="gcell">
@@ -252,7 +240,7 @@
 
   <!-- 4. 글씨 모드 -->
   <section>
-    <div class="sec-head"><span class="no">4</span><h2>글씨 모드 · 연습 흐름</h2></div>
+    <div class="sec-head"><span class="no">04</span><h2>글씨 모드 · 연습 흐름</h2></div>
     <div class="modes">
       <div class="mode">
         <div class="sample trace">가나다</div>
@@ -270,15 +258,15 @@
         <p>안내선만 있는 칸에 직접 써요</p>
       </div>
     </div>
-    <p class="note">추천 흐름 &nbsp;→&nbsp; <b>회색 따라쓰기</b>로 익히고 → <b>검은 글씨</b>로 보고 쓰고 → <b>빈칸 연습</b>으로 마무리 점검해요.</p>
+    <p class="note"><b>추천 흐름</b> &nbsp;→&nbsp; <b>회색 따라쓰기</b>로 익히고 → <b>검은 글씨</b>로 보고 쓰고 → <b>빈칸 연습</b>으로 마무리 점검해요.</p>
   </section>
 
   <!-- 5. 활용 레시피 -->
   <section>
-    <div class="sec-head"><span class="no">5</span><h2>바로 쓰는 활용 레시피</h2></div>
+    <div class="sec-head"><span class="no">05</span><h2>바로 쓰는 활용 레시피</h2></div>
 
     <div class="recipe">
-      <h3>📝 받아쓰기 연습지</h3>
+      <h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h8l5 5v15H6zM14 2v5h5M9 13h6M9 17h6"/></svg>받아쓰기 연습지</h3>
       <ol>
         <li>받아쓰기 문장을 <b>한 줄에 하나씩</b> 입력</li>
         <li>글꼴 <span class="chip">학교안심 받아쓰기</span></li>
@@ -288,7 +276,7 @@
     </div>
 
     <div class="recipe">
-      <h3>🔤 낱글자 쓰기 연습지</h3>
+      <h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>낱글자 쓰기 연습지</h3>
       <ol>
         <li>연습할 글자 입력</li>
         <li>가로 칸 수를 <b>적게</b> → 칸이 커져요</li>
@@ -298,7 +286,7 @@
     </div>
 
     <div class="recipe">
-      <h3>✅ 빈칸 평가용 연습지</h3>
+      <h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18"/><path d="M8 12l3 3 5-6"/></svg>빈칸 평가용 연습지</h3>
       <ol>
         <li>연습할 글을 넣어 칸 수·페이지 수 먼저 확인</li>
         <li>글씨 모드 <span class="chip">빈칸 연습</span>으로 변경</li>
@@ -309,7 +297,7 @@
 
   <!-- 6. 인쇄 팁 -->
   <section>
-    <div class="sec-head"><span class="no">6</span><h2>인쇄 · PDF 저장 체크리스트</h2></div>
+    <div class="sec-head"><span class="no">06</span><h2>인쇄 · PDF 저장 체크리스트</h2></div>
     <div class="card">
       <ul class="checklist">
         <li><b>용지 크기</b> — A4</li>
@@ -324,7 +312,7 @@
 
   <!-- 7. FAQ -->
   <section>
-    <div class="sec-head"><span class="no">7</span><h2>자주 묻는 질문</h2></div>
+    <div class="sec-head"><span class="no">07</span><h2>자주 묻는 질문</h2></div>
 
     <details>
       <summary>안내선이 인쇄·PDF에서 흐리게 나와요</summary>
@@ -349,8 +337,8 @@
   </section>
 
   <footer>
-    글씨 쓰기 연습장 · <span class="handle">@slp_irudassam</span><br>
-    <a href="https://slp-irudassam.github.io/korean-handwriting/">slp-irudassam.github.io/korean-handwriting</a>
+    <span>글씨 쓰기 연습장 · <a href="https://sososoop.github.io/korean-handwriting/">sososoop.github.io/korean-handwriting</a></span>
+    <span class="r">소소숲 : 지혜의 기록소</span>
   </footer>
 
 </div>
